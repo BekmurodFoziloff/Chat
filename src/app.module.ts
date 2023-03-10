@@ -3,6 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { MessagesModule } from './messages/messages.module';
+import { RoomsModule } from './rooms/rooms.module';
+import { ChatModule } from './chat/chat.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -21,7 +25,11 @@ import { AuthenticationModule } from './authentication/authentication.module';
       })
     }),
     DatabaseModule,
-    AuthenticationModule
+    AuthenticationModule,
+    UsersModule,
+    MessagesModule,
+    RoomsModule,
+    ChatModule
   ],
   controllers: [],
   providers: []

@@ -7,8 +7,8 @@ import { IsUniqueEmailValidator } from '../validators/IsUniqueEmail.validator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
+  controllers: [UsersController],
   providers: [UsersService, IsUniqueEmailValidator],
-  exports: [UsersService],
-  controllers: [UsersController]
+  exports: [UsersService]
 })
 export class UsersModule {}

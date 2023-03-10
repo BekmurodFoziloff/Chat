@@ -1,5 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToMany,
+  CreateDateColumn,
+  UpdateDateColumn
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Message } from '../messages/message.entity';
+import { Room } from '../rooms/room.entity';
 
 @Entity()
 class User {
@@ -26,11 +36,20 @@ class User {
   @Exclude()
   public currentHashedRefreshToken?: string;
 
+  @OneToMany(() => Message, (message) => message.owner)
+  public messages: Message[];
+
+  @OneToMany(() => Room, (room) => room.owner)
+  public rooms: Room[];
+
+  @ManyToMany(() => Room, (room) => room.members)
+  public joinedRooms: Room[];
+
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  public updatedAt: Date;
 }
 
 export default User;

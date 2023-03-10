@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Body, Delete, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Body, Delete, Req, UseGuards, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UpdateUserDto from './dto/updateUser.dto';
 import FindOneParams from '../utils/findOneParams';
@@ -7,26 +7,23 @@ import { ChangePassword } from './dto/changePassword.dto';
 import RequestWithUser from '../authentication/interfaces/requestWithUser.interface';
 
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  async getAllUsers() {
-    return this.usersService.getAllUsers();
-  }
-
   @Get(':id')
+  @UseGuards(JwtAuthenticationGuard)
   async getUserById(@Param() { id }: FindOneParams) {
     return this.usersService.getUserById(Number(id));
   }
 
-  @Patch('edit/:id')
+  @Patch(':id/edit')
   @UseGuards(JwtAuthenticationGuard)
   async updateUser(@Param() { id }: FindOneParams, @Body() userData: UpdateUserDto) {
     return this.usersService.updateUser(Number(id), userData);
   }
 
-  @Delete('delete/:id')
+  @Delete(':id/delete')
   @UseGuards(JwtAuthenticationGuard)
   async deleteUser(@Param() { id }: FindOneParams) {
     return this.usersService.deleteUser(Number(id));

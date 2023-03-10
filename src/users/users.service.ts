@@ -16,7 +16,7 @@ export class UsersService {
   ) {}
 
   async getUserByEmail(email: string) {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({ where: { email }, relations: ['rooms', 'joinedRooms'] });
     if (user) {
       return user;
     }
@@ -24,11 +24,11 @@ export class UsersService {
   }
 
   async getAllUsers() {
-    return await this.usersRepository.find();
+    return await this.usersRepository.find({ relations: ['rooms', 'joinedRooms'] });
   }
 
   async getUserById(id: number) {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ where: { id }, relations: ['rooms', 'joinedRooms'] });
     if (user) {
       return user;
     }
@@ -42,15 +42,15 @@ export class UsersService {
   }
 
   async updateUser(id: number, userData: UpdateUserDto) {
-    const updateUserResult = await this.usersRepository.update(id, userData);
-    if (!updateUserResult.affected) {
+    const updatedUser = await this.usersRepository.update(id, userData);
+    if (!updatedUser.affected) {
       throw new UserNotFoundException(id);
     }
   }
 
   async deleteUser(id: number) {
-    const deleteUserResult = await this.usersRepository.delete(id);
-    if (!deleteUserResult.affected) {
+    const deletedUser = await this.usersRepository.delete(id);
+    if (!deletedUser.affected) {
       throw new UserNotFoundException(id);
     }
   }
@@ -87,10 +87,10 @@ export class UsersService {
       throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await bcrypt.hash(passwordData.newPassword, 10);
-    const updatePasswordResult = await this.usersRepository.update(userId, {
+    const updatedPassword = await this.usersRepository.update(userId, {
       password: hashedPassword
     });
-    if (!updatePasswordResult.affected) {
+    if (!updatedPassword.affected) {
       throw new UserNotFoundException(userId);
     }
   }
