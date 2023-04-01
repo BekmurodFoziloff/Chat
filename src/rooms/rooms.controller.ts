@@ -1,4 +1,16 @@
-import { Controller, Get, Param, Post, Body, Req, Patch, Delete, UseGuards,  ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Req,
+  Patch,
+  Delete,
+  UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors
+} from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import FindOneParams from '../utils/findOneParams';
 import { CreateRoomDto } from './dto/createRoom.dto';

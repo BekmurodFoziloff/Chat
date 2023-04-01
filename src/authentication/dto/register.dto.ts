@@ -1,6 +1,6 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsAlpha, IsOptional, Matches } from 'class-validator';
 import { IsUniqueEmail } from '../../validators/IsUniqueEmail.validator';
-import { IsMatchPassword } from '../../validators/IsMatchPassword.validator';
+import { IsPasswordMatching } from '../../validators/IsPasswordMatching.validator';
 
 export class RegisterDto {
   @IsEmail()
@@ -29,7 +29,7 @@ export class RegisterDto {
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(16)
-  @IsMatchPassword('password')
+  @IsPasswordMatching('password')
   passwordConfirm: string;
 }
 

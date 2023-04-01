@@ -71,35 +71,33 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('createMessage')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() messageData: CreateMessageDto,
-    @MessageBody() roomId: number
+    @MessageBody() messageData: CreateMessageDto
   ) {
     const owner = await this.chatService.getUserFromSocket(client);
     if (!owner) {
       client.disconnect(true);
       throw new WsException('Invalid credentials');
     }
-    const room = await this.roomsService.getRoom(Number(roomId));
+    const room = await this.roomsService.getRoom(Number(messageData.roomId));
     const newMessage = await this.messagesService.createMessage(messageData, room, owner);
     this.server.sockets.emit('createMessage', newMessage);
-    this.server.sockets.to(roomId.toString()).emit('createMessage', newMessage);
-    console.log(`Client ${client.id} created message: ${newMessage.content} to room: ${roomId}`);
+    this.server.sockets.to(messageData.roomId.toString()).emit('createMessage', newMessage);
+    console.log(`Client ${client.id} created message: ${newMessage.content} to room: ${messageData.roomId}`);
   }
 
   @SubscribeMessage('updateMessage')
   async handleUpdateMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() messageData: UpdateMessageDto,
-    @MessageBody() roomId: number
+    @MessageBody() messageData: UpdateMessageDto
   ) {
     const user = await this.chatService.getUserFromSocket(client);
     if (!user) {
       client.disconnect(true);
       throw new WsException('Invalid credentials');
     }
-    const updatedMessage = await this.messagesService.updateMessage(Number(roomId), messageData, Number(user.id));
+    const updatedMessage = await this.messagesService.updateMessage(Number(messageData.roomId), messageData, Number(user.id));
     this.server.sockets.emit('updateMessage', updatedMessage);
-    this.server.sockets.to(roomId.toString()).emit('updateMessage', updatedMessage);
+    this.server.sockets.to(messageData.roomId.toString()).emit('updateMessage', updatedMessage);
   }
 
   @SubscribeMessage('deleteMessage')

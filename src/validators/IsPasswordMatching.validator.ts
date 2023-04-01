@@ -9,7 +9,7 @@ import {
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class IsMatchPasswordValidator implements ValidatorConstraintInterface {
+export class IsPasswordMatchingValidator implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
     const relatedValue = (args.object as any)[relatedPropertyName];
@@ -23,14 +23,14 @@ export class IsMatchPasswordValidator implements ValidatorConstraintInterface {
   }
 }
 
-export function IsMatchPassword(property: string, validationOptions?: ValidationOptions) {
+export function IsPasswordMatching(property: string, validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [property],
-      validator: IsMatchPasswordValidator
+      validator: IsPasswordMatchingValidator
     });
   };
 }

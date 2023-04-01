@@ -9,4 +9,8 @@ export class UpdateMessageDto {
   @MaxLength(500)
   @IsNotEmpty()
   content: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  roomId: number
 }

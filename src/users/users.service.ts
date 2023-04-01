@@ -6,7 +6,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import UpdateUserDto from './dto/updateUser.dto';
 import * as bcrypt from 'bcrypt';
 import UserNotFoundException from './exceptions/userNotFound.exception';
-import { ChangePassword } from './dto/changePassword.dto';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Injectable()
 export class UsersService {
@@ -80,7 +80,7 @@ export class UsersService {
     });
   }
 
-  async changePassword(userId: number, passwordData: ChangePassword) {
+  async changePassword(userId: number, passwordData: ChangePasswordDto) {
     const user = await this.getUserById(userId);
     const isPasswordMatching = await bcrypt.compare(passwordData.oldPassword, user.password);
     if (!isPasswordMatching) {
