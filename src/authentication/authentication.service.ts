@@ -28,7 +28,6 @@ export class AuthenticationService {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
       }
-      console.log(error);
       throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
